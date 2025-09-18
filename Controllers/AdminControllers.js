@@ -9,7 +9,7 @@ module.exports.createAdmin = async (req, res) => {
         }
         const newAdmin = new AdminModal({ adminName, mobileNumber, password });
         await newAdmin.save();
-       return res.json({ status: true, message: "Admin created successfully", Admin: newAdmin });
+        return res.json({ status: true, message: "Admin created successfully", Admin: newAdmin });
     }
     catch (error) {
         return res.json({ message: "Server error", error: error.message });
@@ -78,6 +78,23 @@ module.exports.getAdminById = async (req, res) => {
 
     }
 }
+
+module.exports.login = async (req, res) => {
+    const { adminName, password } = req.body;
+    try {
+
+        let userDetails = await AdminModal.findOne({ adminName, password });
+
+        if (!userDetails) {
+            return res.json({ status: false, message: "Invalid adminName or password" });
+        }
+        return res.json({ status: true, message: "Login successful", userDetails });
+    }
+    catch (error) {
+        return res.json({ message: "Server error", error: error.message });
+    }
+}
+
 
 
 

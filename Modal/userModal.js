@@ -6,6 +6,10 @@ const userSchema = new Schema({
     name: {
         type: String,
     },
+    userName: {
+        type: String,
+        Uinque: true
+    },
     mobileNumber: {
         type: String,
     },

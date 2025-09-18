@@ -1,6 +1,6 @@
 const express = require('express');
 const { Router } = express;
-const { craeteUser, updateUser, getAllUsers, deleteUser, getUserById ,login} = require('../Controllers/userController');
+const { craeteUser, updateUser, getAllUsers, deleteUser, getUserById, login, uniqueUserName } = require('../Controllers/userController');
 const router = Router();
 
 router.post('/create-user', craeteUser);
@@ -9,6 +9,7 @@ router.get('/get-all-users', getAllUsers);
 router.get('/delete-user/:userId', deleteUser);
 router.get('/get-by-userId/:userId', getUserById);
 router.post('/login', login);
+router.post('/uniqueUserName', uniqueUserName);
 
 
 module.exports = router;

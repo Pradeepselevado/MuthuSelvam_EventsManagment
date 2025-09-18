@@ -2,12 +2,12 @@ const userModal = require("../Modal/userModal");
 const adminModal = require("../Modal/AdminModal");
 
 module.exports.craeteUser = async (req, res) => {
-    const { name, mobileNumber, password } = req.body;
+    const { name, userName, mobileNumber, password } = req.body;
     try {
         if (!name) {
             return res.json({ status: false, message: "Name is required" });
         }
-        const newUser = new userModal({ name, mobileNumber, password });
+        const newUser = new userModal({ name, mobileNumber, password,userName });
         await newUser.save();
         return res.json({ status: true, message: "User created successfully", user: newUser });
     }
@@ -80,19 +80,13 @@ module.exports.getUserById = async (req, res) => {
 }
 
 module.exports.login = async (req, res) => {
-    const { mobileNumber, password, loginBy } = req.body;
+    const { userName, password } = req.body;
     try {
 
-        let userDetails;
-        if (loginBy === "user") {
-            userDetails = await userModal.findOne({ mobileNumber, password });
-        }
-        if (loginBy === "admin") {
-            userDetails = await adminModal.findOne({ mobileNumber, password });
-        }
+        let userDetails = await userModal.findOne({ userName, password });
 
         if (!userDetails) {
-            return res.json({ status: false, message: "Invalid mobile number or password" });
+            return res.json({ status: false, message: "Invalid userName or password" });
         }
         return res.json({ status: true, message: "Login successful", userDetails });
     }
@@ -100,5 +94,21 @@ module.exports.login = async (req, res) => {
         return res.json({ message: "Server error", error: error.message });
     }
 }
+
+module.exports.uniqueUserName = async (req, res) => {
+    const { userName } = req.body;
+    try {
+        let userDetails = await userModal.findOne({ userName });
+
+        if (userDetails) {
+            return res.json({ status: false, message: "UserName already exists" });
+        }
+        return res.json({ status: true, message: "UserName is available" });
+    }
+    catch (error) {
+        return res.json({ message: "Server error", error: error.message });
+    }
+}
+
 
 

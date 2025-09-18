@@ -1,12 +1,14 @@
 const eventModal = require("../Modal/EventModal");
 
 module.exports.createEvent = async (req, res) => {
-    const { eventName, eventDate, location, description, endDate, totalSeats } = req.body;
+    const { eventName, eventDate, location, description, endDate, availableSeats } = req.body;
     try {
         if (!eventName) {
             return res.json({ status: false, message: "eventName is required" });
         }
-        const newEvent = new eventModal({ eventName, eventDate, location, description, endDate, totalSeats });
+        const newEvent = new eventModal({ eventName, eventDate, location, description, endDate,  availableSeats, 
+            totalSeats: availableSeats 
+        });
         await newEvent.save();
         return res.json({ status: true, message: "Event created successfully", Event: newEvent });
     }
@@ -16,7 +18,7 @@ module.exports.createEvent = async (req, res) => {
 }
 
 module.exports.updateEvent = async (req, res) => {
-    const { EventId, eventName, eventDate, location, description, endDate ,totalSeats} = req.body;
+    const { EventId, eventName, eventDate, location, description, endDate, totalSeats } = req.body;
     try {
 
         const Event = await eventModal.findById(EventId);
