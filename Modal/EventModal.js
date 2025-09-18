@@ -20,7 +20,10 @@ const eventSchema = new Schema({
     },
     endDate:{
         type: Date,
-    }
+    },
+    totalSeats:{
+        type:Number
+    },
 
 })
 
