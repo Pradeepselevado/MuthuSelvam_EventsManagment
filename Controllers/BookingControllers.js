@@ -5,9 +5,10 @@ module.exports.createBooking = async (req, res) => {
     const { eventId, userId, amount, paymentStatus, ticketcount } = req.body;
     try {
 
-        const newBooking = new BookingModal({ eventId, userId, amount, paymentStatus });
+        const newBooking = new BookingModal({ eventId, userId, amount, paymentStatus,ticketcount });
 
         const eventDetails = await eventModal.findById(eventId);
+
         console.log(eventDetails.availableSeats);
         if (eventDetails.availableSeats <= 0) {
             return res.json({ status: false, message: "No available Seats" });
@@ -19,7 +20,12 @@ module.exports.createBooking = async (req, res) => {
 
             }, { new: true });
 
+
+            console.log("req.body",
+                req.body
+            )
         await newBooking.save();
+
         return res.json({ status: true, message: "Booking created successfully", Booking: newBooking });
     }
     catch (error) {
